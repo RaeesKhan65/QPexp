@@ -54,9 +54,8 @@ class PulseSequence:
                 if(pulse_train.pulse_train_index == pulse_train_index):
                     self.pulse_trains.pop(pos)
                     self.num_of_pulse_trains -= 1
-                else:
-                    return False
-            return True
+                    return True
+            return False
         else:
             return False
 
