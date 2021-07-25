@@ -26,7 +26,7 @@ class PulseTrain:
             self.pulse_on_times.append(round(self.time_on + i * (self.width + self.separation), 10))
         self.pulse_widths = [self.width] * int(pulses_in_train)
 
-        self.latest_pulse_train_event = round(np.amax(np.array(self.pulse_on_times)) + self.width,12)
+        self.latest_pulse_train_event = round(np.amax(np.array(self.pulse_on_times)) + self.separation+self.width,12)
         self.first_pulse_train_event = round(np.amin(np.array(self.pulse_on_times)),12)
 
 class PulseSequence:
@@ -317,7 +317,7 @@ class PulseSequence:
                 instructions.append("0x000000, END_LOOP, loop, %s" % (left_over_lo))
 
 
-            le = last_event+separation
+            le = last_event
             counter = 2
         instructions.append("0x000000, CONTINUE,0,50")
         instructions.append("0x000000, STOP,0,100")
