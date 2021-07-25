@@ -11,7 +11,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import qdarkstyle
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -189,6 +188,12 @@ class Ui_MainWindow(object):
         font.setPointSize(18)
         self.stop_pulse_sequence.setFont(font)
         self.stop_pulse_sequence.setObjectName("stop_pulse_sequence")
+        self.clear_messages = QtWidgets.QPushButton(self.pb_control)
+        self.clear_messages.setGeometry(QtCore.QRect(390, 10, 181, 31))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.clear_messages.setFont(font)
+        self.clear_messages.setObjectName("clear_messages")
         self.tabWidget.addTab(self.pb_control, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -200,7 +205,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -233,6 +238,7 @@ class Ui_MainWindow(object):
         self.get_pb_status.setText(_translate("MainWindow", "Get PulseBlaster Status"))
         self.start_pulse_sequence.setText(_translate("MainWindow", "Start Pulse Sequence"))
         self.stop_pulse_sequence.setText(_translate("MainWindow", "Stop Pulse Sequence"))
+        self.clear_messages.setText(_translate("MainWindow", "Clear Messages"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.pb_control), _translate("MainWindow", "Pulse-Blaster Control"))
 
 

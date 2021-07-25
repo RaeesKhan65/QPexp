@@ -107,7 +107,7 @@ class PB_app(QMainWindow):
             self.ui.status.append("Instructions not generated")
 
     def clear_status(self):
-        self.ui.status.setPlainText("")
+        self.ui.status.clear()
 
 
 
@@ -117,6 +117,8 @@ class PB_app(QMainWindow):
 if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
+    dark_stylesheet = qdarkstyle.load_stylesheet_pyqt5()
+    app.setStyleSheet(dark_stylesheet)
     dark_stylesheet = qdarkstyle.load_stylesheet_pyqt5()
     app.setStyleSheet(dark_stylesheet)
     myapp = PB_app()
