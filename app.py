@@ -15,10 +15,12 @@ class PB_app(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        #Instantiate required classes, start threads, and create required instruction list which will be filled later
         self.pulse_sequence = PulseSequence()
         self.instructions = []
         self.pb_thread = CommunicateWithPB()
 
+        #Connect PB_app GUI buttons for pulse train generator tab
         self.ui.add_pulse_train.clicked.connect(self.add_pulse_train)
         self.ui.delete_pulse_train.clicked.connect(self.delete_pulse_train)
         self.ui.generate_instr.clicked.connect(self.generate_instructions)
@@ -26,6 +28,7 @@ class PB_app(QMainWindow):
         self.ui.save_instr.clicked.connect(self.write_instructions)
         self.ui.clear.clicked.connect(self.clear_status)
 
+        #Connect PB_app GUI buttons for pulse blaster control tab
         self.ui.get_pb_status.clicked.connect(self.pb_thread.get_pb_status)
         self.ui.init_pb.clicked.connect(self.pb_thread.init_pb)
         self.ui.close_pb.clicked.connect(self.pb_thread.close_pb)
@@ -34,7 +37,7 @@ class PB_app(QMainWindow):
         self.ui.stop_pulse_sequence.clicked.connect(self.pb_thread.stop_pulse_sequence)
         self.ui.clear_messages.clicked.connect(self.clear_messages)
 
-
+        #Connect message signal coming from pulseblaster class
         self.pb_thread.message.connect(self.message)
 
 
@@ -155,6 +158,10 @@ class CommunicateWithPB(QtCore.QThread):
 
 
     def init_pb(self):
+        self.message.emit("Copyright (c) 2015 SpinCore Technologies, Inc.")
+        self.message.emit("Using SpinAPI Library version %s" % pb_get_version())
+        self.message.emit("Found %d boards in the system.\n" % pb_count_boards())
+
         if(pb_init()==0):
             self.message.emit("PulseBlaster successfully Initialized")
         else:
@@ -239,9 +246,6 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     dark_stylesheet = qdarkstyle.load_stylesheet_pyqt5()
     app.setStyleSheet(dark_stylesheet)
-    dark_stylesheet = qdarkstyle.load_stylesheet_pyqt5()
-    app.setStyleSheet(dark_stylesheet)
     myapp = PB_app()
     myapp.show()
-
     sys.exit(app.exec_())
