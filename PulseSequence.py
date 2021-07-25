@@ -20,7 +20,7 @@ class PulseTrain:
         self.separation = float(separation[:-2]) * eval(separation[-2:])
         self.pulses_in_train = pulses_in_train
         self.pulse_on_times = []
-        if self.pulses_in_train == 1 or self.pulses_in_train == 0:
+        if self.pulses_in_train == 0:
             self.separation = 0.0
         for i in range(int(pulses_in_train)):
             self.pulse_on_times.append(round(self.time_on + i * (self.width + self.separation), 10))
@@ -159,7 +159,7 @@ class PulseSequence:
         return  (LONG_DELAY_STEP,delay_num,left_over,hex_val)
 
     def assertion(self,time):
-        assert time in [2.5, 5, 7.5, 10, 12.5], "Valid small pulse sizes and separations are 2.5ns,5ns,7.5ns," \
+        assert time in [2.5, 5.0, 7.5, 10.0, 12.5], "Valid small pulse sizes and separations are 2.5ns,5ns,7.5ns," \
                                                               "10ns, problem with pulse size %sns" % time
 
     def write_instruction_file(self,filename):

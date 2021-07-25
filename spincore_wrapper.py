@@ -232,7 +232,7 @@ def pb_reset():
 def pb_close():
     return spinapi.pb_close()
 
-def pb_status(self):
+def pb_status():
     result = ''.join(list(bin(spinapi.pb_read_status()))[2:])
     if len(result) < 4:
         result = result.zfill(4)
@@ -251,3 +251,4 @@ def pb_status(self):
     else:
         status += 'Status not understood'
         return status
+

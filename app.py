@@ -1,7 +1,7 @@
 from appgui import Ui_MainWindow
-#from spincore_wrapper import *
+from spincore_wrapper import *
 from PulseSequence import PulseSequence
-from PyQt5 import  QtWidgets
+from PyQt5 import  QtWidgets,QtCore
 from PyQt5.QtWidgets import QMainWindow, QApplication
 import sys
 import qdarkstyle
@@ -17,6 +17,7 @@ class PB_app(QMainWindow):
 
         self.pulse_sequence = PulseSequence()
         self.instructions = []
+        self.pb_thread = CommunicateWithPB()
 
         self.ui.add_pulse_train.clicked.connect(self.add_pulse_train)
         self.ui.delete_pulse_train.clicked.connect(self.delete_pulse_train)
@@ -24,6 +25,19 @@ class PB_app(QMainWindow):
         self.ui.load_instr.clicked.connect(self.generate_instructions_from_file)
         self.ui.save_instr.clicked.connect(self.write_instructions)
         self.ui.clear.clicked.connect(self.clear_status)
+
+        self.ui.get_pb_status.clicked.connect(self.pb_thread.get_pb_status)
+      #  self.ui.init_pb.clicked.connect(self.pb_thread.init_pb)
+     #   self.ui.close_pb.clicked.connect(self.pb_thread.close_pb)
+     #   self.ui.send_pb_instructions.clicked.connect(self.pb_thread.send_pb_instructions)
+     #   self.ui.start_pulse_sequence.clicked.connect(self.pb_thread.start_pulse_sequence)
+     #   self.ui.stop_pulse_sequence.clicked.connect(self.pb_thread.stop_pulse_sequence)
+      #  self.ui.clear_messages.clicked.connect(self.clear_messages)
+
+
+#        self.pb_thread.message.connect(self.message)
+
+
 
 
     def add_pulse_train(self):
@@ -87,6 +101,7 @@ class PB_app(QMainWindow):
         try:
             self.instructions = self.pulse_sequence.generate_instructions()
             self.ui.status.append("Instructions generated succesfully")
+            self.pb_thread.instructions = self.instructions
         except:
             self.ui.status.append("Instructions not generated")
 
@@ -103,11 +118,104 @@ class PB_app(QMainWindow):
         try:
             self.instructions = self.pulse_sequence.generate_instructions_from_file(filename=file_name)
             self.ui.status.append("Instructions generated succesfully")
+            self.pb_thread.instructions = self.instructions
         except:
             self.ui.status.append("Instructions not generated")
 
     def clear_status(self):
         self.ui.status.clear()
+
+    def message(self,text):
+        self.ui.messages.append(text)
+
+    def clear_messages(self):
+        self.ui.messages.clear()
+
+
+
+class CommunicateWithPB(QtCore.QThread):
+
+    message = QtCore.pyqtSignal(str)
+
+    def __init__(self,parent = None,instructions=None):
+        super().__init__(parent)
+        self.instructions = instructions
+
+
+    def init_pb(self):
+        if(pb_init()==0):
+            self.message.emit("PulseBlaster successfully Initialized")
+        else:
+            error = pb_get_error()
+            self.message.emit(error)
+
+
+    def get_pb_status(self):
+        status = pb_status()
+        self.message.emit(status)
+
+
+    def close_pb(self):
+        try:
+            pb_close()
+            self.message.emit("PulseBlaster successfully closed")
+        except:
+            self.message.emit("PulseBlaster not closed")
+
+
+    def send_pb_instructions(self):
+        try:
+            pb_start_programming(PULSE_PROGRAM)
+
+            for instruction in self.instructions:
+                instr_type = instruction[1]
+
+                if(instr_type=='LOOP'):
+                    flag = eval(instruction[0])
+                    instr = eval(instruction[1])
+                    instr_data = int(instruction[2])
+                    time = float(instruction[3])
+                    loop = pb_inst_pbonly(flag,instr,instr_data,time)
+
+                elif(instr_type=='END_LOOP'):
+                    flag = eval(instruction[0])
+                    instr = eval(instruction[1])
+                    instr_data = loop
+                    time = float(instruction[3])
+                    pb_inst_pbonly(flag,instr,instr_data,time)
+
+                else:
+                    flag = eval(instruction[0])
+                    instr = eval(instruction[1])
+                    instr_data = int(instruction[2])
+                    time = float(instruction[3])
+                    pb_inst_pbonly(flag,instr,instr_data,time)
+
+            pb_stop_programming()
+
+            self.message.emit("PulseBlaster successfully programmed")
+
+        except:
+            self.message.emit("PulseBlaster not programmed")
+
+
+
+
+    def start_pulse_sequence(self):
+        try:
+            pb_reset()
+            pb_start()
+            self.message.emit("Pulse sequence started")
+        except:
+            self.message.emit("Pulse sequence not started")
+
+
+    def stop_pulse_sequence(self):
+        try:
+            pb_stop()
+            self.message.emit("Pulse sequence stopped, Don't forget to close the board!")
+        except:
+            self.message.emit("Pulse sequence not stopped")
 
 
 
