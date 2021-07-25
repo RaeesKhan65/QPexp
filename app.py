@@ -51,6 +51,18 @@ class PB_app(QMainWindow):
             self.pulse_sequence.add_pulse_train(time_on= time_on, width=width,separation=separation,
                                                 pulses_in_train=num_of_pulses,channels=channels)
 
+            self.pulse_sequence.set_first_sequence_event()
+            if(self.pulse_sequence.first_sequence_event <= 12.5 and self.pulse_sequence.first_sequence_event != 0):
+                try:
+                    self.pulse_sequence.assertion(self.pulse_sequence.first_sequence_event)
+                except:
+                    self.pulse_sequence.delete_pulse_train(
+                    pulse_train_index=self.pulse_sequence.pulse_trains[-1].pulse_train_index)
+                    self.pulse_sequence.pulse_train_index -= 1
+                    self.ui.status.append("First event has to start at 0ns or after 2.5ns")
+                    raise Exception("First event has to start at 0ns or after 2.5ns")
+
+
 
             if(self.pulse_sequence.has_coincident_events()):
                 self.pulse_sequence.delete_pulse_train(pulse_train_index=self.pulse_sequence.pulse_trains[-1].pulse_train_index)
@@ -156,11 +168,11 @@ class CommunicateWithPB(QtCore.QThread):
 
 
     def close_pb(self):
-        try:
-            pb_close()
+        if (pb_close() == 0):
             self.message.emit("PulseBlaster successfully closed")
-        except:
-            self.message.emit("PulseBlaster not closed")
+        else:
+            error = pb_get_error()
+            self.message.emit(error)
 
 
     def send_pb_instructions(self):
@@ -197,23 +209,25 @@ class CommunicateWithPB(QtCore.QThread):
 
         except:
             self.message.emit("PulseBlaster not programmed")
+            error = pb_get_error()
+            self.message.emit(error)
 
 
     def start_pulse_sequence(self):
-        try:
-            pb_reset()
-            pb_start()
+        pb_reset()
+        if (pb_start() == 0):
             self.message.emit("Pulse sequence started")
-        except:
-            self.message.emit("Pulse sequence not started")
+        else:
+            error = pb_get_error()
+            self.message.emit(error)
 
 
     def stop_pulse_sequence(self):
-        try:
-            pb_stop()
+        if (pb_stop() == 0):
             self.message.emit("Pulse sequence stopped, Don't forget to close the board!")
-        except:
-            self.message.emit("Pulse sequence not stopped")
+        else:
+            error = pb_get_error()
+            self.message.emit(error)
 
 
 
