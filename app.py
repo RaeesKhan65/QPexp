@@ -27,15 +27,15 @@ class PB_app(QMainWindow):
         self.ui.clear.clicked.connect(self.clear_status)
 
         self.ui.get_pb_status.clicked.connect(self.pb_thread.get_pb_status)
-      #  self.ui.init_pb.clicked.connect(self.pb_thread.init_pb)
-     #   self.ui.close_pb.clicked.connect(self.pb_thread.close_pb)
-     #   self.ui.send_pb_instructions.clicked.connect(self.pb_thread.send_pb_instructions)
-     #   self.ui.start_pulse_sequence.clicked.connect(self.pb_thread.start_pulse_sequence)
-     #   self.ui.stop_pulse_sequence.clicked.connect(self.pb_thread.stop_pulse_sequence)
-      #  self.ui.clear_messages.clicked.connect(self.clear_messages)
+        self.ui.init_pb.clicked.connect(self.pb_thread.init_pb)
+        self.ui.close_pb.clicked.connect(self.pb_thread.close_pb)
+        self.ui.send_pb_instructions.clicked.connect(self.pb_thread.send_pb_instructions)
+        self.ui.start_pulse_sequence.clicked.connect(self.pb_thread.start_pulse_sequence)
+        self.ui.stop_pulse_sequence.clicked.connect(self.pb_thread.stop_pulse_sequence)
+        self.ui.clear_messages.clicked.connect(self.clear_messages)
 
 
-#        self.pb_thread.message.connect(self.message)
+        self.pb_thread.message.connect(self.message)
 
 
 
@@ -197,8 +197,6 @@ class CommunicateWithPB(QtCore.QThread):
 
         except:
             self.message.emit("PulseBlaster not programmed")
-
-
 
 
     def start_pulse_sequence(self):
