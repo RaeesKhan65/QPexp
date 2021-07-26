@@ -26,8 +26,8 @@ class PulseTrain:
             self.pulse_on_times.append(round(self.time_on + i * (self.width + self.separation), 10))
         self.pulse_widths = [self.width] * int(pulses_in_train)
 
-        self.latest_pulse_train_event = round(np.amax(np.array(self.pulse_on_times)) + self.separation+self.width,12)
-        self.first_pulse_train_event = round(np.amin(np.array(self.pulse_on_times)),12)
+        self.latest_pulse_train_event = round(np.amax(np.array(self.pulse_on_times)) + self.separation+self.width,10)
+        self.first_pulse_train_event = round(np.amin(np.array(self.pulse_on_times)),10)
 
 class PulseSequence:
 
@@ -39,7 +39,7 @@ class PulseSequence:
         self.pulse_trains = []
         self.first_sequence_event = 0
 
-    def add_pulse_train(self, time_on=1e-6, width=1e-7, separation=0.0, pulses_in_train=1, channels = []):
+    def add_pulse_train(self, time_on='15ns', width='15ns', separation='15ns', pulses_in_train=1, channels = []):
         # add this pulse to the current sequence
         pulse_train = PulseTrain(time_on=time_on, width=width, separation=separation,
                                  pulses_in_train=pulses_in_train,
@@ -326,13 +326,14 @@ class PulseSequence:
 
 
 if __name__ == '__main__':
-    p = PulseSequence()
-    p.add_pulse_train(time_on='0ns', width='50ns', separation='50ns', pulses_in_train=2,channels = [0,1,2])
-    p.add_pulse_train(time_on='202.5ns', width='30ns', separation='5ns', pulses_in_train=4,channels = [0,1,2])
-    p.add_pulse_train(time_on='200ms', width='300ms', separation='300ms', pulses_in_train=4,channels = [0])
-    print(p.generate_instructions())
-    p.write_instruction_file('instruction.txt')
-   # print(p.generate_instructions_from_file('instruction.txt'))
+    pass
+  #  p = PulseSequence()
+  #  p.add_pulse_train(time_on='0ns', width='50ns', separation='50ns', pulses_in_train=2,channels = [0,1,2])
+  #  p.add_pulse_train(time_on='202.5ns', width='30ns', separation='5ns', pulses_in_train=4,channels = [0,1,2])
+  #  p.add_pulse_train(time_on='200ms', width='300ms', separation='300ms', pulses_in_train=4,channels = [0])
+  #  print(p.generate_instructions())
+  #  p.write_instruction_file('instruction.txt')
+  #  print(p.generate_instructions_from_file('instruction.txt'))
 
 
 
