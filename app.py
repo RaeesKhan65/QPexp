@@ -186,7 +186,7 @@ class CommunicateWithPB(QtCore.QThread):
     def init_pb(self):
         self.message.emit("Copyright (c) 2015 SpinCore Technologies, Inc.")
         self.message.emit("Using SpinAPI Library version %s" % pb_get_version())
-        self.message.emit("Found %d boards in the system.\n" % pb_count_boards())
+        self.message.emit("Found %d boards in the system." % pb_count_boards())
 
         if(pb_init()==0):
             self.message.emit("PulseBlaster successfully Initialized")
