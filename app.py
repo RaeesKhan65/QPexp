@@ -210,9 +210,26 @@ class CommunicateWithPB(QtCore.QThread):
 
     def send_pb_instructions(self):
         try:
+
+            PULSE_PROGRAM = 0
+            FREQ_REGS = 1
+            CONTINUE = 0
+            STOP = 1
+            LOOP = 2
+            END_LOOP = 3
+            JSR = 4
+            RTS = 5
+            BRANCH = 6
+            LONG_DELAY = 7
+            WAIT = 8
+            RTI = 9
+
             pb_start_programming(PULSE_PROGRAM)
 
-            for instruction in self.instructions:
+            for instruction_string in self.instructions:
+
+                instruction_list = instruction_string.split(",")
+                instruction = [x.strip() for x in instruction_list]
                 instr_type = instruction[1]
 
                 if(instr_type=='LOOP'):
@@ -221,6 +238,7 @@ class CommunicateWithPB(QtCore.QThread):
                     instr_data = int(instruction[2])
                     time = float(instruction[3])
                     loop = pb_inst_pbonly(flag,instr,instr_data,time)
+
 
                 elif(instr_type=='END_LOOP'):
                     flag = eval(instruction[0])

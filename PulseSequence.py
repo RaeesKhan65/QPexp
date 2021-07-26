@@ -311,7 +311,7 @@ class PulseSequence:
 
 
                 instructions.append("%s, LOOP, %s, %s" % (hex_val_width, num_of_pulses,left_over_hi))
-                instructions.append("%s LONG_DELAY, %s,%s" %(hex_val_width,delay_num_hi,LONG_DELAY_STEP_hi))
+                instructions.append("%s, LONG_DELAY, %s,%s" %(hex_val_width,delay_num_hi,LONG_DELAY_STEP_hi))
 
                 instructions.append("0x000000, LONG_DELAY, %s,%s" %(delay_num_lo,LONG_DELAY_STEP_lo))
                 instructions.append("0x000000, END_LOOP, loop, %s" % (left_over_lo))
