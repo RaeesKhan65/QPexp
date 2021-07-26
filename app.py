@@ -1,5 +1,5 @@
 from appgui import Ui_MainWindow
-#from spincore_wrapper import *
+from spincore_wrapper import *
 from PulseSequence import PulseSequence
 from PyQt5 import  QtWidgets,QtCore
 from PyQt5.QtWidgets import QMainWindow, QApplication
@@ -188,12 +188,15 @@ class CommunicateWithPB(QtCore.QThread):
         self.message.emit("Using SpinAPI Library version %s" % pb_get_version())
         self.message.emit("Found %d boards in the system." % pb_count_boards())
 
+        pb_select_board(0)
+
         if(pb_init()==0):
             self.message.emit("PulseBlaster successfully Initialized")
         else:
             error = pb_get_error()
             self.message.emit(error)
 
+        pb_core_clock(400)
 
     def get_pb_status(self):
         status = pb_status()
