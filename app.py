@@ -42,7 +42,6 @@ class PB_app(QMainWindow):
 
 
 
-
     def add_pulse_train(self):
         try:
             time_on = self.ui.on_time.text()
@@ -54,13 +53,38 @@ class PB_app(QMainWindow):
             self.pulse_sequence.add_pulse_train(time_on= time_on, width=width,separation=separation,
                                                 pulses_in_train=num_of_pulses,channels=channels)
 
+            try:
+                ns = 1.0
+                us = 1000.0
+                ms = 1000000.0
+                self.pulse_sequence.assertion(float(width[:-2]) * eval(width[-2:]))
+            except:
+                self.pulse_sequence.delete_pulse_train(
+                    pulse_train_index=self.pulse_sequence.pulse_trains[-1].pulse_train_index)
+                self.pulse_sequence.pulse_train_index -= 1
+                self.ui.status.append("Pulse width invalid")
+                raise Exception("Pulse width invalid")
+
+            try:
+                ns = 1.0
+                us = 1000.0
+                ms = 1000000.0
+                self.pulse_sequence.assertion(float(separation[:-2]) * eval(separation[-2:]))
+            except:
+                self.pulse_sequence.delete_pulse_train(
+                    pulse_train_index=self.pulse_sequence.pulse_trains[-1].pulse_train_index)
+                self.pulse_sequence.pulse_train_index -= 1
+                self.ui.status.append("Pulse separation invalid")
+                raise Exception("Pulse separation invalid")
+
+
             self.pulse_sequence.set_first_sequence_event()
             if(self.pulse_sequence.first_sequence_event <= 12.5 and self.pulse_sequence.first_sequence_event != 0):
                 try:
                     self.pulse_sequence.assertion(self.pulse_sequence.first_sequence_event)
                 except:
                     self.pulse_sequence.delete_pulse_train(
-                    pulse_train_index=self.pulse_sequence.pulse_trains[-1].pulse_train_index)
+                        pulse_train_index=self.pulse_sequence.pulse_trains[-1].pulse_train_index)
                     self.pulse_sequence.pulse_train_index -= 1
                     self.ui.status.append("First event has to start at 0ns or after 2.5ns")
                     raise Exception("First event has to start at 0ns or after 2.5ns")
@@ -249,3 +273,5 @@ if __name__ == '__main__':
     myapp = PB_app()
     myapp.show()
     sys.exit(app.exec_())
+
+
