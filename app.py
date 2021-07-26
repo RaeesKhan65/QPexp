@@ -1,5 +1,5 @@
 from appgui import Ui_MainWindow
-from spincore_wrapper import *
+#from spincore_wrapper import *
 from PulseSequence import PulseSequence
 from PyQt5 import  QtWidgets,QtCore
 from PyQt5.QtWidgets import QMainWindow, QApplication
@@ -57,7 +57,8 @@ class PB_app(QMainWindow):
                 ns = 1.0
                 us = 1000.0
                 ms = 1000000.0
-                self.pulse_sequence.assertion(float(width[:-2]) * eval(width[-2:]))
+                if((float(width[:-2]) * eval(width[-2:])) <=12.5):
+                    self.pulse_sequence.assertion(float(width[:-2]) * eval(width[-2:]))
             except:
                 self.pulse_sequence.delete_pulse_train(
                     pulse_train_index=self.pulse_sequence.pulse_trains[-1].pulse_train_index)
@@ -69,7 +70,8 @@ class PB_app(QMainWindow):
                 ns = 1.0
                 us = 1000.0
                 ms = 1000000.0
-                self.pulse_sequence.assertion(float(separation[:-2]) * eval(separation[-2:]))
+                if((float(separation[:-2]) * eval(separation[-2:]))<=12.5):
+                    self.pulse_sequence.assertion(float(separation[:-2]) * eval(separation[-2:]))
             except:
                 self.pulse_sequence.delete_pulse_train(
                     pulse_train_index=self.pulse_sequence.pulse_trains[-1].pulse_train_index)
