@@ -195,7 +195,7 @@ class PulseSequence:
                 hex_val = self.small_pulse(time=self.first_sequence_event,channels = [])
                 instructions.append("%s, CONTINUE, 0, %s" % (hex_val,12.5))
 
-            elif (self.first_sequence_event <= self.max_instr_length):
+            elif (self.first_sequence_event <= self.max_instr_length and self.first_sequence_event > 12.5):
                 instructions.append("0x000000, CONTINUE, 0, %s" % (self.first_sequence_event))
 
             elif(self.first_sequence_event > self.max_instr_length):
@@ -222,7 +222,7 @@ class PulseSequence:
                         self.assertion(off_time)
                         hex_val = self.small_pulse(time=off_time,channels=[])
                         instructions.append("%s,CONTINUE,0,12.5" % hex_val)
-                    elif(off_time <= self.max_instr_length):
+                    elif(off_time <= self.max_instr_length and off_time > 12.5):
                         instructions.append("0x000000, CONTINUE, 0, %s" % (off_time))
                     elif (off_time > self.max_instr_length):
                         LONG_DELAY_STEP, delay_num, left_over,_ = self.long_pulse(time=off_time,channels=[])
@@ -306,7 +306,7 @@ class PulseSequence:
 
             elif (width > self.max_instr_length and separation > self.max_instr_length):
 
-                LONG_DELAY_STEP_hi, delay_num_hi, left_over_hi, hex_val_width = self.long_pulse(time=separation, channels=channels)
+                LONG_DELAY_STEP_hi, delay_num_hi, left_over_hi, hex_val_width = self.long_pulse(time=width, channels=channels)
                 LONG_DELAY_STEP_lo, delay_num_lo, left_over_lo,_ = self.long_pulse(time=separation,channels=channels)
 
 

@@ -1,5 +1,5 @@
 from appgui import Ui_MainWindow
-from spincore_wrapper import *
+#from spincore_wrapper import *
 from PulseSequence import PulseSequence
 from PyQt5 import  QtWidgets,QtCore
 from PyQt5.QtWidgets import QMainWindow, QApplication
