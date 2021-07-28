@@ -42,7 +42,7 @@ class Ui_MainWindow(object):
         self.label_3.setGeometry(QtCore.QRect(20, 130, 111, 71))
         self.label_3.setObjectName("label_3")
         self.Num_of_pulse_trains = QtWidgets.QLCDNumber(self.pulse_train_generator)
-        self.Num_of_pulse_trains.setGeometry(QtCore.QRect(820, 30, 81, 31))
+        self.Num_of_pulse_trains.setGeometry(QtCore.QRect(780, 30, 81, 31))
         self.Num_of_pulse_trains.setObjectName("Num_of_pulse_trains")
         self.label_4 = QtWidgets.QLabel(self.pulse_train_generator)
         self.label_4.setGeometry(QtCore.QRect(630, 20, 201, 61))
